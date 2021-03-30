@@ -6,12 +6,13 @@
 
 typedef std::map<std::string, std::string> ParamsMap;
 
-typedef struct {
-    std::string method;
-    std::string url;
-    std::string protocol;        
-    ParamsMap params;
-} Request;
+class Request {
+    public:
+        std::string method;
+        std::string url;
+        std::string protocol;        
+        ParamsMap params;
+};
 
 class Parser {
     public: 
