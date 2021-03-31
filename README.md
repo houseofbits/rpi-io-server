@@ -15,7 +15,7 @@
 
 **HTTP Request structure**
 
-``host/set-port-pins?port=[0,1]&pin[0:16]=[0,1]``
+``http://hostname:8888/set-port-pins?port=[0,1]&pin[0:16]=[0,1]``
 
 **Hardware**
 
