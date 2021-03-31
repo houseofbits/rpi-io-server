@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "IOException.h"
 
 Request Parser::parse(std::string request)
 {
@@ -9,7 +10,7 @@ Request Parser::parse(std::string request)
     std::string query;
 
     if (!(iss >> requestStructure.method >> query >> requestStructure.protocol)) {
-        throw 1;
+        throw IOException("Failed to split request string " + iss.str());
     }
 
     iss.clear();
@@ -17,7 +18,7 @@ Request Parser::parse(std::string request)
 
     if(!std::getline(iss, requestStructure.url, '?'))
     {
-        throw 2;
+        throw IOException("Failed to get line from request string " + iss.str());
     }
 
     requestStructure.params = parseRequestStringParams(iss);

@@ -1,10 +1,11 @@
 #include "Server.h"
+#include "IOException.h"
+#include "BasicResponse.h"
+#include "HttpStatusCodes.h"
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
-const std::string Server::httpSuccessResponse = std::string("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nOK");
 
 void Server::init(int port)
 {
@@ -33,8 +34,6 @@ void Server::run()
 {
     int addrlen = sizeof(address);
     
-    int new_socket;
-
     long valread;
 
     Request requestStructure;
@@ -44,12 +43,12 @@ void Server::run()
         try{
 
             printf("\n--------------- Wait ------------------\n\n");
-            if ((new_socket = accept(serverFd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
+            if ((currentSocket = accept(serverFd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
                 continue;
             }
             
             char buffer[30000] = {0};
-            valread = read( new_socket , buffer, 30000);
+            valread = read( currentSocket , buffer, 30000);
 
             std::string request(buffer, 30000);
 
@@ -59,13 +58,21 @@ void Server::run()
 
             ioHandler.handleRequest(requestStructure);
 
-            write(new_socket , httpSuccessResponse.c_str(), httpSuccessResponse.length());
-
-        } catch(int e) {
-
+            createResponse(HttpStatusCode::OK, "OK");
+        } catch(IOException &e) {
+            std::cout << e.message << std::endl;
+            createResponse(HttpStatusCode::BadRequest, e.message);
         }
 
-        close(new_socket);  
-    }
-    
+        close(currentSocket);  
+    }   
+}
+
+void Server::createResponse(int statusCode, std::string content)
+{   
+    BasicResponse response;
+    response.statusCode = statusCode;
+    response.content = content;
+    std::string raw = response.get();
+    write(currentSocket , raw.c_str(), raw.length()); 
 }

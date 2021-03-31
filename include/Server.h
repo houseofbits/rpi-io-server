@@ -1,3 +1,5 @@
+#pragma once
+
 #include "IOHandler.h"
 #include <stdio.h>
 #include <sys/socket.h>
@@ -9,8 +11,6 @@
 class Server {
     public: 
 
-        const static std::string httpSuccessResponse;
-
         IOHandler ioHandler;
 
         Parser parser;
@@ -19,9 +19,12 @@ class Server {
         
         sockaddr_in address;
 
+        int currentSocket;
+
         void init(int port);
 
         void run();
 
+        void createResponse(int statusCode, std::string content);
 
 };
