@@ -24,6 +24,7 @@ void BasicResponse::build()
     response += "Content-Type: ";
     response += httpContentType;
     response += "\n";
+    response += "Access-Control-Allow-Origin: *\n";
     response += "Content-Length: ";
     response += std::to_string(content.size());
     response += "\n\n";
