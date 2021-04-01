@@ -58,7 +58,11 @@ void IOHandler::setPortPin(int port, int pin, int state)
     }    
     if (state != 0 && state != 1) {
         throw IOException("Wrong state");
-    }    
+    }   
+
+    //Invert state
+    state = (state == 0) ? 1 : 0;
+    
     if (port == 0 && io1) {
         io1->write_pin(pin, state);
     }
