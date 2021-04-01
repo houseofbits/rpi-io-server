@@ -42,7 +42,8 @@ void Server::run()
     {   
         try{
 
-            printf("\n--------------- Wait ------------------\n\n");
+            //printf("\n--------------- Wait ------------------\n\n");
+            
             if ((currentSocket = accept(serverFd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
                 continue;
             }
@@ -54,7 +55,7 @@ void Server::run()
 
             requestStructure = parser.parse(request);
 
-            parser.debug(requestStructure);
+            //parser.debug(requestStructure);
 
             ioHandler.handleRequest(requestStructure);
 
