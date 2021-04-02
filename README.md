@@ -13,11 +13,42 @@
 
 3) Make & run ``make`` ``./rpiioserver``
 
-**HTTP Request structure**
+4) Create systemd service
+
+``cd /etc/systemd/system``
+
+``sudo nano io-server.service``
+
+```
+[Unit]
+Description=IO Server
+After=network.target
+
+[Service]
+ExecStart=/home/pi/Documents/rpi-io-server/rpiioserver
+WorkingDirectory=/home/pi/Documents/rpi-io-server
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+```
+
+5) Test the service & enable
+
+``sudo systemctl start io-server.service``
+
+``sudo systemctl enable io-server.service``
+
+
+6) Make HTTP requests to the PI
 
 ``http://hostname:8888/set-port-pins?port=[0,1]&pin[0:16]=[0,1]``
 
+
 **Hardware**
 
-RPI IO https://www.abelectronics.co.uk/ expansion boards are used
-- IO Pi Plus
+IO Pi Plus from https://www.abelectronics.co.uk
+ 
